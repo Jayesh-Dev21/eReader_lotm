@@ -1,0 +1,158 @@
+<task>
+Build a complete Android Kotlin app: a Kindle-style offline book reader for "Lord of the Mysteries" novel.
+</task>
+
+<architecture>
+- Language: Kotlin
+- UI: Jetpack Compose (Material 3, clean/sleek design)
+- Data: Room Database for offline chapter storage
+- Scraping: One-time fetch with Jsoup + Retrofit, then fully offline
+- Navigation: Jetpack Navigation Compose
+- State: ViewModel + StateFlow
+- Persistence: DataStore for last-read position
+</architecture>
+
+<core_requirements>
+1. SCRAPING STRATEGY:
+   - Fetch all chapters from https://ranobes.top/novels/133485-lord-of-the-mysteries-v812312.html ONCE
+   - Parse HTML with Jsoup to extract: book title, chapter titles, chapter content
+   - Store all chapters in Room DB (Chapter entity: id, title, content, orderIndex)
+   - After initial scrape, app is 100% offline
+   - Include a Bash script (scrape_and_populate.sh) that:
+     * Takes novel URL as input
+     * Outputs structured data (JSON/CSV)
+     * Can be reused for adding new books to the database
+
+2. OFFLINE-FIRST DESIGN:
+   - No network calls after initial data population
+   - All reading from local Room DB
+   - App should work in airplane mode
+
+3. READING FEATURES:
+   - Chapter list screen (scrollable list, shows chapter number + title)
+   - Reader screen with:
+     * Smooth vertical scroll (like Kindle)
+     * Swipe left/right OR tap edges to go next/previous chapter
+     * Chapter title displayed at top
+     * Progress indicator (current chapter X/Y)
+   - Font size adjustment: Slider (12sp to 28sp)
+   - Theme toggle: Light + Dark (Material 3 themes, clean aesthetic)
+   - Font family selector: Serif, Sans-serif, Monospace
+   - Save last-read position: chapter ID + scroll percentage (auto-save on scroll)
+
+4. UI/UX REQUIREMENTS:
+   - Minimal, clean design (inspired by Kindle)
+   - Bottom navigation or drawer for: Library, Reader, Settings
+   - Settings screen for: font size, font family, theme
+   - Reading screen hides UI chrome on tap (immersive mode)
+   - Smooth animations (chapter transitions, theme changes)
+
+5. CODE STRUCTURE:
+   Generate complete code files with TODO comments for Copilot expansion:
+   
+   /app/src/main/java/com/reader/lotm/
+   ├── data/
+   │   ├── local/
+   │   │   ├── AppDatabase.kt          // Room database
+   │   │   ├── ChapterDao.kt           // DAO for chapters
+   │   │   ├── ChapterEntity.kt        // Chapter table model
+   │   │   └── DataStoreManager.kt     // Save reading progress
+   │   ├── repository/
+   │   │   └── BookRepository.kt       // Abstraction layer
+   │   └── scraper/
+   │       └── NovelScraper.kt         // Jsoup HTML parsing logic
+   ├── ui/
+   │   ├── theme/
+   │   │   ├── Theme.kt                // Material 3 Light/Dark
+   │   │   ├── Color.kt
+   │   │   └── Type.kt
+   │   ├── screens/
+   │   │   ├── ChapterListScreen.kt    // Browse chapters
+   │   │   ├── ReaderScreen.kt         // Main reading view
+   │   │   └── SettingsScreen.kt       // Font/theme controls
+   │   ├── components/
+   │   │   ├── ChapterItem.kt          // List item composable
+   │   │   └── ReadingControls.kt      // Font size slider, etc.
+   │   └── viewmodels/
+   │       ├── ChapterListViewModel.kt
+   │       ├── ReaderViewModel.kt
+   │       └── SettingsViewModel.kt
+   ├── navigation/
+   │   └── NavGraph.kt                 // Navigation setup
+   └── MainActivity.kt                 // Entry point
+
+   /scripts/
+   └── scrape_and_populate.sh          // Bash script for reproducible scraping
+
+   /docs/
+   └── IMPLEMENTATION.md               // Markdown doc explaining all components
+</core_requirements>
+
+<technical_specifications>
+- Min SDK: 26 (Android 8.0)
+- Target SDK: 34
+- Gradle dependencies (include in build.gradle.kts):
+  * Jetpack Compose BOM
+  * Room (KSP processor)
+  * DataStore Preferences
+  * Retrofit + OkHttp (for initial scrape only)
+  * Jsoup (HTML parsing)
+  * Navigation Compose
+  * ViewModel + Lifecycle
+  * Coroutines + Flow
+
+- Manifest permissions:
+  * INTERNET (for one-time scrape)
+  * Optional: WRITE_EXTERNAL_STORAGE (for export feature)
+
+- Key implementation details:
+  * Use LazyColumn for chapter list (performance)
+  * Use ScrollState + derivedStateOf for scroll position tracking
+  * Auto-save reading position with debounce (save every 2 seconds)
+  * Use rememberSaveable for configuration changes
+  * Implement proper error handling (try-catch, sealed Result class)
+</technical_specifications>
+
+<bash_script_requirements>
+The scrape_and_populate.sh script should:
+1. Accept novel URL as argument: ./scrape_and_populate.sh <URL>
+2. Use curl + jq OR a simple Kotlin script to:
+   - Fetch HTML
+   - Parse with Jsoup-equivalent (or call a minimal Kotlin CLI tool)
+   - Output JSON: {"title": "...", "chapters": [{"id":1,"title":"...","content":"..."}]}
+3. Insert data into Room DB (via adb + SQL insert OR by generating a prepopulated DB file)
+4. Be reusable for other novels (generic HTML parsing with selectors as variables)
+</bash_script_requirements>
+
+<output_format>
+Generate ALL code files with:
+- Complete, production-ready Kotlin code (no placeholders)
+- TODO comments for future enhancements
+- Proper error handling and edge cases
+- No explanatory text in code files
+
+ALSO generate a single IMPLEMENTATION.md file that explains:
+- Project structure overview
+- How each component works (Database, Scraper, UI, Navigation)
+- How to run the app (setup, build, initial scrape)
+- How to use the Bash script to add new books
+- Architecture decisions (why Room, why offline-first, etc.)
+- Future enhancement TODOs (search, annotations, multiple books)
+
+Do NOT include explanations inline in code. All documentation goes in IMPLEMENTATION.md.
+</output_format>
+
+<success_criteria>
+- App compiles and runs on Android 8.0+
+- Initial scrape fetches all LoTM chapters successfully
+- Fully functional offline after first launch
+- Reading position persists across app restarts
+- Smooth scrolling, no lag on chapter navigation
+- Theme switch works instantly
+- Font controls update live
+- Bash script successfully adds new books when executed
+</success_criteria>
+
+<execution_instruction>
+Generate the complete project. I will not intervene. Produce all files, code, and documentation now.
+</execution_instruction>
