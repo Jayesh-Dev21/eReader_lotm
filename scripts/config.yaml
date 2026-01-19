@@ -1,0 +1,42 @@
+ranobes.top:
+  base_url: "https://ranobes.top"
+  chapters_url: "https://ranobes.top/chapters/{book_id}/page/{page}/"
+  chapters_url_first: "https://ranobes.top/chapters/{book_id}/"
+  
+  selectors:
+    # Chapter list page
+    chapter_links: "article.poster a.poster-title"
+    chapter_url: "href"
+    pagination_next: "div.pagination a:last-child"
+    pagination_last: "div.pagination a[title*='Последняя']"
+    
+    # Individual chapter page
+    chapter_title: "h1.chapter-title, h1.entry-title, .chapter-title"
+    chapter_content: "div.text-content, div.entry-content, article.text"
+    
+    # Elements to remove (ads, scripts, etc)
+    remove_elements:
+      - "script"
+      - "style"
+      - "iframe"
+      - "ins.adsbygoogle"
+      - "div.ads"
+      - "div.advertisement"
+  
+  # Rate limiting (seconds)
+  rate_limit:
+    min: 2
+    max: 5
+  
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    backoff_factor: 2
+    timeout: 30
+  
+  # User agents rotation
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"

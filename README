@@ -1,0 +1,65 @@
+LORD OF THE MYSTERIES READER
+=============================
+
+Community Service - Read LOTM Web Novel For Free
+
+Android e-reader app for Lord of the Mysteries novel.
+
+
+FEATURES
+--------
+- Continuous scroll & paginated reading modes
+- Material 3 design with AMOLED dark mode
+- Customizable fonts and themes
+- Room database for offline reading
+- Web scraper for chapter collection
+
+
+BUILD
+-----
+./gradlew assembleDebug
+
+Or:
+./build_and_sign.sh debug
+
+
+SCRAPING
+--------
+cd scripts
+source .venv/bin/activate
+
+Full automated scrape:
+  python complete_scraper.py --book-id 133485
+
+Test single chapter:
+  python test_chapter_scrape.py
+
+Gradual collection:
+  python scrape_links.py --book-id 133485
+  python fetch_chapters.py --links output/chapter_links_133485.json
+
+
+TECH
+----
+Android: Kotlin, Jetpack Compose, Room Database
+Scraping: Python, Selenium, BeautifulSoup
+UI: Material 3, MVVM architecture
+
+
+STRUCTURE
+---------
+app/src/main/java/com/reader/lotm/
+  data/     - Database entities, DAOs, repositories
+  ui/       - Compose screens and components
+  utils/    - Helper utilities
+
+scripts/
+  complete_scraper.py - Automated scraper
+  scrape_links.py     - Link collector
+  fetch_chapters.py   - Chapter downloader
+  utils/              - Parser, cleaner, bypass modules
+
+
+LICENSE
+-------
+For personal use only.
